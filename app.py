@@ -48,8 +48,10 @@ LAYOUT_BASE = dict(
     font=dict(family="Segoe UI, Helvetica Neue, Arial, sans-serif", size=12, color="#404040"),
     plot_bgcolor="white",
     paper_bgcolor="white",
-    margin=dict(l=55, r=28, t=48, b=42),
-    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0),
+    # Extra top margin for full titles; bottom margin for legend under the plot
+    # (legend above the plot was clipping titles mid-word).
+    margin=dict(l=55, r=28, t=72, b=88),
+    legend=dict(orientation="h", yanchor="top", y=-0.22, xanchor="left", x=0),
     hovermode="x unified",
 )
 
@@ -143,7 +145,15 @@ def empty_fig(title: str, y_title: str) -> go.Figure:
     fig = go.Figure()
     fig.update_layout(
         **LAYOUT_BASE,
-        title=dict(text=title, x=0.01, xanchor="left"),
+        title=dict(
+            text=title,
+            x=0.01,
+            xanchor="left",
+            y=0.98,
+            yanchor="top",
+            font=dict(size=14, color="#1E3A5F"),
+        ),
+        title_automargin=True,
         xaxis_title="Date",
         yaxis_title=y_title,
         annotations=[
@@ -166,16 +176,25 @@ def empty_fig(title: str, y_title: str) -> go.Figure:
 def style_fig(fig: go.Figure, title: str, y_title: str, y_tickformat: str | None = None) -> go.Figure:
     fig.update_layout(
         **LAYOUT_BASE,
-        title=dict(text=title, x=0.01, xanchor="left", font=dict(size=15, color="#1E3A5F")),
+        title=dict(
+            text=title,
+            x=0.01,
+            xanchor="left",
+            y=0.98,
+            yanchor="top",
+            font=dict(size=14, color="#1E3A5F"),
+        ),
+        title_automargin=True,
         xaxis_title="Date",
         yaxis_title=y_title,
     )
-    fig.update_xaxes(showgrid=True, gridcolor="#E5E5E5", zeroline=False)
+    fig.update_xaxes(showgrid=True, gridcolor="#E5E5E5", zeroline=False, automargin=True)
     fig.update_yaxes(
         showgrid=True,
         gridcolor="#E5E5E5",
         zeroline=False,
         tickformat=y_tickformat,
+        automargin=True,
     )
     return fig
 
